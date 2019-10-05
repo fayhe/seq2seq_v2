@@ -1,16 +1,14 @@
 package training.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
-import training.dao.TrainingDAO;
+import training.dao.ModelDAO;
+import training.request.GetModelsRequest;
 import training.request.TrainingRequest;
 import training.response.TrainingResponse;
 import training.utils.ModelLibClient;
-
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**-
@@ -18,26 +16,26 @@ import java.util.List;
  */
 
 @Component
-public class TrainingService {
+public class ModelService {
 
     @Autowired
-    TrainingDAO trainingDAO;
+    ModelDAO modelDAO;
     @Autowired
     ModelLibClient modelLibClient;
 
     public TrainingResponse training(TrainingRequest trainingRequest) {
         TrainingResponse trainingResponse = new TrainingResponse();
-        List<String> modelNames = trainingDAO.getModelName(trainingRequest.getTaskName(), trainingRequest.getClientName(),
+        List<String> modelNames = modelDAO.getModelName(trainingRequest.getTaskName(), trainingRequest.getClientName(),
                 trainingRequest.getDocTypeName());
         for (String modelName : modelNames) {
             //trigger model lib
             System.out.println("modelName:" + modelName);
-            String modelTypeName = trainingDAO.getModelTypeName(modelName);
+            String modelTypeName = modelDAO.getModelTypeName(modelName);
             System.out.println("modelTypeName:" + modelTypeName);
             modelLibClient.triggerModelTraining(trainingRequest.getTrainingDataPath(), trainingRequest.getClientName(),
                     trainingRequest.getDocTypeName(), trainingRequest.getTaskName(), modelTypeName);
-            trainingDAO.createTrainingProcess(modelName);
-            Integer trainingProcessId =  trainingDAO.getMaxTrainingProcessId(modelName, trainingRequest.getClientName(), trainingRequest.getDocTypeName());
+            modelDAO.createTrainingProcess(modelName);
+            Integer trainingProcessId =  modelDAO.getMaxTrainingProcessId(modelName, trainingRequest.getClientName(), trainingRequest.getDocTypeName());
             trainingResponse.addTrainingProcessId(trainingProcessId);
         }
         return trainingResponse;
@@ -55,12 +53,21 @@ public class TrainingService {
         String modelMetricsStr = JSONObject.toJSONString(modelMetricsJSON);
         // CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION
         //get max training process id
-        int processId = trainingDAO.getMaxTrainingProcessId(modelName, clientName , docTypeName);
+        int processId = modelDAO.getMaxTrainingProcessId(modelName, clientName , docTypeName);
         System.out.println("process id:" + processId);
-        trainingDAO.updateTrainingProcess(TrainingDAO.STATUS_COMPLETED, processId, modelMetricsStr);
+        modelDAO.updateTrainingProcess(ModelDAO.STATUS_COMPLETED, processId, modelMetricsStr);
         //TODO: Compare metrics with old model?
-        trainingDAO.updateModel(modelName, modelMetricsStr);
+        modelDAO.updateModel(modelName, modelMetricsStr);
         }
+
+
+    public List<Map<String,Object>> getModels(GetModelsRequest getModelRequest) {
+        List<Map<String,Object>> models = modelDAO.getModels(getModelRequest.getTaskName(),
+                getModelRequest.getClientName(), getModelRequest.getDocTypeName());
+        return models;
+    }
+
+
     }
 
 

@@ -10,7 +10,7 @@ import java.sql.*;
  */
 
 @Component
-public class TrainingDAO extends GenericDAO {
+public class ModelDAO extends GenericDAO {
 
     public static final String STATUS_COMPLETED = "COMPLETED";
 
@@ -252,16 +252,78 @@ public class TrainingDAO extends GenericDAO {
     }
 
 
-    public static void main(String args[]) {
-        TrainingDAO trainingDAO= new TrainingDAO();
-        System.out.print(trainingDAO.getModelTypeName("CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION"));
-        List<String> modelNames = trainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
-        for (String modelName : modelNames) {
-            System.out.println("model name:" + modelName);
-            int processId = trainingDAO.getMaxTrainingProcessId(modelName, "QMA","EMAIL");
-            System.out.println("process id:" + processId);
-            trainingDAO.updateTrainingProcess(TrainingDAO.STATUS_COMPLETED, processId,"");
+    public List<Map<String,Object>> getModels(String taskName, String clientName, String docTypeName) {
+        Connection connection = null;
+        Statement statement = null;
+        List<Map<String,Object>> models =  new <HashMap<String,Object>>ArrayList();
+        try {
+
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "select m.model_name, m.is_model_used_for_prediction," +
+                    " m.model_metrics, m.model_type_name " +
+                    "from model m, model_type mt, doc_type dt " +
+                    "where m.model_type_name = mt.model_type_name " +
+                    "and dt.doc_type_name = m.doc_type_name " +
+                    "and mt.task_name = '" + taskName + "' " +
+                    "and dt.client_name = '" + clientName + "' " +
+                    "and dt.doc_type_name =  '" + docTypeName + "' ";
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                String modelName = resultSet.getString(1);
+                Boolean isUsedForPrediction = resultSet.getBoolean(2);
+                String modelMetrics = resultSet.getString(3);
+                String modelTypeName = resultSet.getString(4);
+                Map model = new HashMap<String, Object>();
+                model.put("model_name", modelName);
+                model.put("model_type_name", modelTypeName);
+                model.put("is_model_used_for_prediction", isUsedForPrediction);
+                model.put("model_metrics", modelMetrics);
+                models.add(model);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
         }
+        return models;
+    }
+
+
+
+
+    public static void main(String args[]) {
+        ModelDAO trainingDAO= new ModelDAO();
+        List<Map<String,Object>> models = trainingDAO.getModels("CLASSIFICATION", "QMA", "EMAIL");
+        for(Map<String,Object> model : models ){
+            System.out.println(model.get("model_name"));
+            System.out.println(model.get("model_type_name"));
+            System.out.println(model.get("is_model_used_for_prediction"));
+            System.out.println(model.get("model_metrics"));
+        }
+        System.out.println();
+
+//        System.out.print(trainingDAO.getModelTypeName("CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION"));
+//        List<String> modelNames = trainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
+//        for (String modelName : modelNames) {
+//            System.out.println("model name:" + modelName);
+//            int processId = trainingDAO.getMaxTrainingProcessId(modelName, "QMA","EMAIL");
+//            System.out.println("process id:" + processId);
+//            trainingDAO.updateTrainingProcess(ModelDAO.STATUS_COMPLETED, processId,"");
+//        }
 
 //
 //        List<String> modelNames = trainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
