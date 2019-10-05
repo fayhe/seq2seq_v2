@@ -1,5 +1,6 @@
 package training.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,5 +44,23 @@ public class TrainingService {
     }
 
 
+    public void updateTrainingProcess(String modelKey, JSONObject modelMetricsJSON){
+        String[] modelKeys = modelKey.split("_");
+        String clientName = modelKeys[0];
+        String docTypeName = modelKeys[1];
+        String taskName = modelKeys[2];
+        String modelTypeName = modelKeys[3];
+        String modelName = taskName + "_" + clientName + "_" + docTypeName + "_" + modelTypeName;
+        System.out.println("generated modelName:" + modelName);
+        String modelMetricsStr = JSONObject.toJSONString(modelMetricsJSON);
+        // CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION
+        //get max training process id
+        int processId = trainingDAO.getMaxTrainingProcessId(modelName, clientName , docTypeName);
+        System.out.println("process id:" + processId);
+        trainingDAO.updateTrainingProcess(TrainingDAO.STATUS_COMPLETED, processId, modelMetricsStr);
+        //TODO: Compare metrics with old model?
+        trainingDAO.updateModel(modelName, modelMetricsStr);
+        }
+    }
 
-}
+

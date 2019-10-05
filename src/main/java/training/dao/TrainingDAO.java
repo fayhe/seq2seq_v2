@@ -11,6 +11,12 @@ import java.sql.*;
 
 @Component
 public class TrainingDAO extends GenericDAO {
+
+    public static final String STATUS_COMPLETED = "COMPLETED";
+
+    public static final String STATUS_IN_PROGRESS = "IN_PROGRESS";
+
+
     public List<String> getModelName(String taskName, String clientName, String docTypeName) {
         Connection connection = null;
         Statement statement = null;
@@ -130,6 +136,78 @@ public class TrainingDAO extends GenericDAO {
     }
 
 
+    public void updateTrainingProcess(String status, Integer processId, String modelMetricsStr) {
+        Connection connection = null;
+        Statement statement = null;
+        List<String> modelNames = new ArrayList<String>();
+        try {
+
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "UPDATE training_process" +
+                    " SET status='" + status + "'," +
+                    " trained_model_metrics ='" + modelMetricsStr + "' " +
+                    " WHERE training_process_id = " + processId ;
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
+    public void updateModel(String modelName, String modelMetricsStr) {
+        Connection connection = null;
+        Statement statement = null;
+        List<String> modelNames = new ArrayList<String>();
+        try {
+
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "UPDATE model" +
+                    " SET model_metrics='" + modelMetricsStr + "'" +
+                    " WHERE model_name = '" + modelName + "'" ;
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
+
     public Integer getMaxTrainingProcessId(String modelName , String clientName, String docTypeName) {
         Connection connection = null;
         Statement statement = null;
@@ -144,12 +222,13 @@ public class TrainingDAO extends GenericDAO {
             " and dt.doc_type_name = m.doc_type_name" +
             " and tp.model_name = '" + modelName + "'" +
             " and dt.client_name = '" + clientName + "'" +
-            " and dt.doc_type_name =  '" + docTypeName + "'";
+            " and dt.doc_type_name =  '" + docTypeName + "'" +
+            " and tp.status = '" + STATUS_IN_PROGRESS  + "'";
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 maxTrainingProcessId = resultSet.getInt(1);
-                System.out.println(maxTrainingProcessId);
+                System.out.println("max process:" + maxTrainingProcessId);
 
             }
         } catch (Exception e) {
@@ -176,10 +255,19 @@ public class TrainingDAO extends GenericDAO {
     public static void main(String args[]) {
         TrainingDAO trainingDAO= new TrainingDAO();
         System.out.print(trainingDAO.getModelTypeName("CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION"));
-//        List<String> modelNames = TrainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
+        List<String> modelNames = trainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
+        for (String modelName : modelNames) {
+            System.out.println("model name:" + modelName);
+            int processId = trainingDAO.getMaxTrainingProcessId(modelName, "QMA","EMAIL");
+            System.out.println("process id:" + processId);
+            trainingDAO.updateTrainingProcess(TrainingDAO.STATUS_COMPLETED, processId,"");
+        }
+
+//
+//        List<String> modelNames = trainingDAO.getModelName("CLASSIFICATION", "QMA", "EMAIL");
 //        for (String modelName : modelNames) {
-//            TrainingDAO.createTrainingProcess(modelName);
-//            TrainingDAO.getMaxTrainingProcessId(modelName, "QMA","EMAIL");
+//            trainingDAO.createTrainingProcess(modelName);
+//            trainingDAO.getMaxTrainingProcessId(modelName, "QMA","EMAIL");
 //        }
     }
 
