@@ -1,0 +1,57 @@
+Naming convention
+a. trained model path: path_prefix/{task_name}_{client_name}_{doc_type_name}_{model_type_name}_{training_process_id}.pkl ##TBC with Ricy if it is single file
+b. model name in model DB: {task_name}_{client_name}_{doc_type_name}_{model_type_name}
+
+MODEL_TRAINING_API
+1. URL: train_model
+   Method: POST
+   Input Parameters:
+   		client_name 
+   		task_name 
+   		doc_type_name
+   Response:
+   training_process_id
+   status: IN_PROGRESS?	
+
+   major flow:
+   For each model type
+   1. create data in training_process table with status as IN_PROGRESS bases on 
+   2. trigger trainmodel api in lib_mario 
+
+2. URL: train_model_callback
+   Method: POST
+   Input Parameters:
+   		client_name (Optional. Will get from DB based on doc_type_name if not provided)
+   		doc_type_name
+   		model_type_name
+   		trained_model_metrics ##TBC with Ricy regarding the content of metrics
+   		trained_model_path
+
+   Response:
+   200
+
+major flow:  
+1. Update trained_model_metrics, trained_model_path and status 
+(COMPLETED) in training_process table
+2. Update model_metrics, model_path in model table if the current metrics better than 
+model.model_metrics
+
+MODEL_SELECTION_API
+1. URL: get_models_info
+   Method: GET
+   Input Parameters:
+   		client_name 
+   		task_name
+   		doc_type_name
+   Response:
+   models (model_name, model_type, metrics, path, is used for predicted) list under this task and doc type
+
+2. URL: select_model_for_prediction
+   Method: PUT
+   Input Parameters:
+   		model_name 
+   Response:
+   200
+   Update is_used_for_prediction and trigger loadmodel api of lib mario ##TBC with Ricy as for the parameter "model_class"
+
+   

@@ -1,0 +1,7 @@
+select m.model_name 
+from model m, model_type mt, doc_type dt
+where m.model_type_name = mt.model_type_name 
+  and dt.doc_type_name = m.doc_type_name
+  and mt.task_name = 'CLASSIFICATION'
+  and dt.client_name = 'QMA' 
+  and dt.doc_type_name =  'EMAIL';

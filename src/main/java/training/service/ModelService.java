@@ -35,14 +35,14 @@ public class ModelService {
             modelLibClient.triggerModelTraining(trainingRequest.getTrainingDataPath(), trainingRequest.getClientName(),
                     trainingRequest.getDocTypeName(), trainingRequest.getTaskName(), modelTypeName);
             modelDAO.createTrainingProcess(modelName);
-            Integer trainingProcessId =  modelDAO.getMaxTrainingProcessId(modelName, trainingRequest.getClientName(), trainingRequest.getDocTypeName());
+            Integer trainingProcessId = modelDAO.getMaxTrainingProcessId(modelName, trainingRequest.getClientName(), trainingRequest.getDocTypeName());
             trainingResponse.addTrainingProcessId(trainingProcessId);
         }
         return trainingResponse;
     }
 
 
-    public void updateTrainingProcess(String modelKey, JSONObject modelMetricsJSON){
+    public void updateTrainingProcess(String modelKey, JSONObject modelMetricsJSON) {
         String[] modelKeys = modelKey.split("_");
         String clientName = modelKeys[0];
         String docTypeName = modelKeys[1];
@@ -53,21 +53,23 @@ public class ModelService {
         String modelMetricsStr = JSONObject.toJSONString(modelMetricsJSON);
         // CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION
         //get max training process id
-        int processId = modelDAO.getMaxTrainingProcessId(modelName, clientName , docTypeName);
+        int processId = modelDAO.getMaxTrainingProcessId(modelName, clientName, docTypeName);
         System.out.println("process id:" + processId);
         modelDAO.updateTrainingProcess(ModelDAO.STATUS_COMPLETED, processId, modelMetricsStr);
         //TODO: Compare metrics with old model?
-        modelDAO.updateModel(modelName, modelMetricsStr);
-        }
+        modelDAO.updateModelMetrics(modelName, modelMetricsStr);
+    }
 
 
-    public List<Map<String,Object>> getModels(GetModelsRequest getModelRequest) {
-        List<Map<String,Object>> models = modelDAO.getModels(getModelRequest.getTaskName(),
+    public List<Map<String, Object>> getModels(GetModelsRequest getModelRequest) {
+        List<Map<String, Object>> models = modelDAO.getModels(getModelRequest.getTaskName(),
                 getModelRequest.getClientName(), getModelRequest.getDocTypeName());
         return models;
     }
 
-
+    public void selectModel(String modelName) {
+        modelDAO.selectModel(modelName);
     }
+}
 
 

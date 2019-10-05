@@ -100,8 +100,6 @@ public class ModelDAO extends GenericDAO {
 
 
 
-
-
     public void createTrainingProcess(String modelName) {
         Connection connection = null;
         Statement statement = null;
@@ -172,7 +170,7 @@ public class ModelDAO extends GenericDAO {
     }
 
 
-    public void updateModel(String modelName, String modelMetricsStr) {
+    public void updateModelMetrics(String modelName, String modelMetricsStr) {
         Connection connection = null;
         Statement statement = null;
         List<String> modelNames = new ArrayList<String>();
@@ -182,6 +180,41 @@ public class ModelDAO extends GenericDAO {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             String sql = "UPDATE model" +
                     " SET model_metrics='" + modelMetricsStr + "'" +
+                    " WHERE model_name = '" + modelName + "'" ;
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
+    public void selectModel(String modelName) {
+        Connection connection = null;
+        Statement statement = null;
+        List<String> modelNames = new ArrayList<String>();
+        try {
+
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            String sql = "UPDATE model" +
+                    " SET is_model_used_for_prediction= 'Y' " +
                     " WHERE model_name = '" + modelName + "'" ;
             statement = connection.createStatement();
             statement.executeUpdate(sql);
@@ -272,7 +305,7 @@ public class ModelDAO extends GenericDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String modelName = resultSet.getString(1);
-                Boolean isUsedForPrediction = resultSet.getBoolean(2);
+                String isUsedForPrediction = resultSet.getString(2);
                 String modelMetrics = resultSet.getString(3);
                 String modelTypeName = resultSet.getString(4);
                 Map model = new HashMap<String, Object>();
@@ -306,14 +339,16 @@ public class ModelDAO extends GenericDAO {
 
 
     public static void main(String args[]) {
+
         ModelDAO trainingDAO= new ModelDAO();
-        List<Map<String,Object>> models = trainingDAO.getModels("CLASSIFICATION", "QMA", "EMAIL");
-        for(Map<String,Object> model : models ){
-            System.out.println(model.get("model_name"));
-            System.out.println(model.get("model_type_name"));
-            System.out.println(model.get("is_model_used_for_prediction"));
-            System.out.println(model.get("model_metrics"));
-        }
+        trainingDAO.selectModel("CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION");
+//        List<Map<String,Object>> models = trainingDAO.getModels("CLASSIFICATION", "QMA", "EMAIL");
+//        for(Map<String,Object> model : models ){
+//            System.out.println(model.get("model_name"));
+//            System.out.println(model.get("model_type_name"));
+//            System.out.println(model.get("is_model_used_for_prediction"));
+//            System.out.println(model.get("model_metrics"));
+//        }
         System.out.println();
 
 //        System.out.print(trainingDAO.getModelTypeName("CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION"));

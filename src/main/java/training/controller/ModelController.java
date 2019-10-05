@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import training.request.GetModelsRequest;
 import training.request.TrainingCallBackRequest;
 import training.request.TrainingRequest;
+import training.request.SelectModelRequest;
 import training.response.GetModelsResponse;
 import training.response.TrainingResponse;
 import training.service.ModelService;
@@ -53,5 +54,12 @@ public class ModelController {
         GetModelsResponse getModelsResponse = new GetModelsResponse();
         getModelsResponse.setModels(modelService.getModels(getModelsRequest));
         return getModelsResponse;
+    }
+
+
+    @RequestMapping(value="/model_selection/v1/select_model",method = RequestMethod.PUT)
+    @ResponseBody
+    public void selectModelCallBack(@RequestBody SelectModelRequest selectModelRequest) {
+        modelService.selectModel(selectModelRequest.getModelName());
     }
 }
