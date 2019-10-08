@@ -1,0 +1,28 @@
+select model
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   .DS_Store
+#	modified:   .idea/workspace.xml
+#	modified:   src/main/java/training/controller/ModelController.java
+#	modified:   src/main/java/training/dao/ModelDAO.java
+#	new file:   src/main/java/training/request/SelectModelRequest.java
+#	modified:   src/main/java/training/service/ModelService.java
+#	modified:   target/classes/training/controller/ModelController.class
+#	modified:   target/classes/training/dao/ModelDAO.class
+#	new file:   target/classes/training/request/SelectModelRequest.class
+#	modified:   target/classes/training/service/ModelService.class
+#	new file:   transformer_db/.DS_Store
+#	new file:   transformer_db/00_CreateTableSpace.sql
+#	new file:   transformer_db/01_CreateDB.sql
+#	new file:   transformer_db/02_CreateTable.sql
+#	new file:   transformer_db/03_InsertData.sql
+#	new file:   transformer_db/04_UsefulSQL.sql
+#	new file:   transformer_db/DB Design v1.2.pptx
+#	new file:   transformer_db/MODEL_TRAINING_API
+#	new file:   transformer_db/select m.model_name
+#

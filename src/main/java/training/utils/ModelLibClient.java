@@ -9,6 +9,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import training.request.ModelLibTrainingRequest;
 
@@ -18,8 +19,8 @@ import training.request.ModelLibTrainingRequest;
 @Component
 public class ModelLibClient {
 
-    //TODO: Read url from application.properties
-    public static final String MODEL_LIB_TRANING_URL  = "http://localhost:8080//model_training/v1/training_model";
+    @Value("${modellib.url}")
+    public String MODEL_LIB_TRANING_URL;
 
     public static void main(String[] args) {
         ModelLibClient modelLibClient = new ModelLibClient();

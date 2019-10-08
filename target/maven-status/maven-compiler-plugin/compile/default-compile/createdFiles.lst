@@ -1,9 +1,5 @@
-training/dao/TrainingDAO.class
-training/request/TrainingRequest.class
 training/dao/GenericDAO.class
-training/controller/TrainingController.class
 training/controller/Application.class
 training/controller/Greeting.class
 training/response/TrainingResponse.class
-training/service/TrainingService.class
-training/utils/test.class
+training/request/TrainingRequest.class

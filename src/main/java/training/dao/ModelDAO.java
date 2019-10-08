@@ -1,5 +1,7 @@
 package training.dao;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -10,13 +12,12 @@ import java.sql.*;
  */
 
 @Component
+//@PropertySource("classpath:application.properties")
 public class ModelDAO extends GenericDAO {
 
     public static final String STATUS_COMPLETED = "COMPLETED";
 
     public static final String STATUS_IN_PROGRESS = "IN_PROGRESS";
-
-
     public List<String> getModelName(String taskName, String clientName, String docTypeName) {
         Connection connection = null;
         Statement statement = null;
