@@ -10,6 +10,8 @@ import training.response.TrainingResponse;
 import training.utils.ModelLibClient;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**-
  * Created by fay on 3/10/19.
@@ -56,7 +58,6 @@ public class ModelService {
         int processId = modelDAO.getMaxTrainingProcessId(modelName, clientName, docTypeName);
         System.out.println("process id:" + processId);
         modelDAO.updateTrainingProcess(ModelDAO.STATUS_COMPLETED, processId, modelMetricsStr);
-        //TODO: Compare metrics with old model?
         modelDAO.updateModelMetrics(modelName, modelMetricsStr);
     }
 
@@ -68,6 +69,13 @@ public class ModelService {
     }
 
     public void selectModel(String modelName) {
+        //trigger model load
+        String[] splittedModelName = modelName.split("_");
+        String taskName = splittedModelName[0];
+        String clientName = splittedModelName[1];
+        String docTypeName = splittedModelName[2];
+        String modelTypeName = splittedModelName[3];
+        modelLibClient.triggerModelLoad( clientName,  docTypeName, taskName, modelTypeName);
         modelDAO.selectModel(modelName);
     }
 }

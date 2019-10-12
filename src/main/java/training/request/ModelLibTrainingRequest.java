@@ -10,7 +10,7 @@ public class ModelLibTrainingRequest {
 
 
     @JsonProperty(value = "model_key")
-    String model_Key;
+    String model_key;
     @JsonProperty(value = "model_type_name")
     String model_type_name;
     @JsonProperty(value = "data_path")
@@ -19,11 +19,11 @@ public class ModelLibTrainingRequest {
     String task_type;
 
     public String getModel_Key() {
-        return model_Key;
+        return model_key;
     }
 
     public void setModel_Key(String model_Key) {
-        this.model_Key = model_Key;
+        this.model_key = model_key;
     }
 
     public String getModel_type_name() {

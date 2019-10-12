@@ -7,6 +7,7 @@
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/response/GetModelsResponse.java
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/response/TrainingResponse.java
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/controller/Application.java
+/Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/request/ModelLibLoadingequest.java
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/service/ModelService.java
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/request/TrainingRequest.java
 /Users/fay/Downloads/transformer/seq2seq_v2/src/main/java/training/dao/GenericDAO.java

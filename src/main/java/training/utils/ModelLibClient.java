@@ -1,6 +1,10 @@
 package training.utils;
 
+import training.request.ModelLibLoadingequest;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.client.ResponseHandler;
@@ -19,26 +23,68 @@ import training.request.ModelLibTrainingRequest;
 @Component
 public class ModelLibClient {
 
-    @Value("${modellib.url}")
+    @Value("${modellib.enable}")
+    public boolean MODEL_LIB_ENABLE;
+
+    @Value("${modellib.modeltraining.url}")
     public String MODEL_LIB_TRANING_URL;
+
+    @Value("${modellib.modelloading.url}")
+    public String MODEL_LIB_LOADING_URL;
+
+    ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         ModelLibClient modelLibClient = new ModelLibClient();
         //String json = "{\"client_name\":\"QMA\",\"task_name\":\"CLASSIFICATION\", \"doc_type_name\":\"EMAIL\"}";
         //System.out.println(modelLibClient.HttpPostWithJson("http://localhost:8080//model_training/v1/training_model", json));
-        modelLibClient.triggerModelTraining("data_path", "QMA", "EMAIL",  "NER", "BERTCLASSIFICATION");
+        //modelLibClient.triggerModelTraining("data_path", "QMA", "EMAIL",  "NER", "BERTCLASSIFICATION");
+        modelLibClient.triggerModelLoad( "QMA", "EMAIL",  "NER", "BERTCLASSIFICATION");
     }
 
-    public String triggerModelTraining(String dataPath,
+    public void triggerModelTraining(String dataPath,
                                        String clientName, String docTypeName,  String taskTypeName,
                                        String modelTypeName){
-        String modelKey = clientName + "_" + docTypeName + "_" + taskTypeName + "_" + modelTypeName;
-        ModelLibTrainingRequest modelLibTrainingRequest = createModelLibTraininngRequest(dataPath, modelKey,
-                modelTypeName, taskTypeName);
-        String modelLibTrainingRequestStr = JSONObject.toJSONString(modelLibTrainingRequest);
-        return HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+        if(MODEL_LIB_ENABLE) {
+            String modelKey = clientName + "_" + docTypeName + "_" + taskTypeName + "_" + modelTypeName;
+            ModelLibTrainingRequest modelLibTrainingRequest = createModelLibTraininngRequest(dataPath, modelKey,
+                    modelTypeName, taskTypeName);
+            String modelLibTrainingRequestStr = JSONObject.toJSONString(modelLibTrainingRequest);
+            Runnable task1 = new Runnable() {
+                @Override
+                public void run() {
+                    // do something
+                    HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+                    System.out.println("Trigger model lib model train API end. modelKey:" + modelKey);
+                }
+            };
+            Future<?> f1 = executor.submit(task1);
+            //return HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+        }
     }
 
+
+
+    public void triggerModelLoad(String clientName, String docTypeName,  String taskTypeName,
+                                     String modelTypeName){
+
+        if(MODEL_LIB_ENABLE) {
+            String modelKey = clientName + "_" + docTypeName + "_" + taskTypeName + "_" + modelTypeName;
+            ModelLibLoadingequest modelLibLoadingRequest = createModelLibLoadRequest(modelKey,
+                    modelTypeName);
+            String modelLibLoadRequestStr = JSONObject.toJSONString(modelLibLoadingRequest);
+            Runnable task1 = new Runnable() {
+                @Override
+                public void run() {
+                    // do something
+                    HttpPostWithJson(MODEL_LIB_LOADING_URL, modelLibLoadRequestStr);
+                    System.out.println("Load model lib model load API end. modelKey:" + modelKey);
+                }
+            };
+            Future<?> f1 = executor.submit(task1);
+            //return HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+        }
+    }
 
     private ModelLibTrainingRequest createModelLibTraininngRequest(String dataPath, String modelKey,
                                                                   String modelTypeName, String taskType) {
@@ -50,10 +96,20 @@ public class ModelLibClient {
         return modelLibTrainingRequest;
     }
 
+    private ModelLibLoadingequest createModelLibLoadRequest( String modelKey,
+                                                                   String modelTypeName) {
+        ModelLibLoadingequest mdelLibLoadingequest = new ModelLibLoadingequest();
+        mdelLibLoadingequest.setModel_key(modelKey);
+        mdelLibLoadingequest.setModel_type(modelTypeName);
+        return mdelLibLoadingequest;
+    }
+
     private String HttpPostWithJson(String url, String json) {
         String returnValue = "";
         CloseableHttpClient httpClient = HttpClients.createDefault();
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
+        System.out.println("url:" +  url);
+        System.out.println("request:" +  json);
         try {
 
             httpClient = HttpClients.createDefault();
@@ -79,6 +135,5 @@ public class ModelLibClient {
         }
         return returnValue;
     }
-
 
 }
