@@ -50,6 +50,7 @@ public class ModelLibClient {
             ModelLibTrainingRequest modelLibTrainingRequest = createModelLibTraininngRequest(dataPath, modelKey,
                     modelTypeName, taskTypeName);
             String modelLibTrainingRequestStr = JSONObject.toJSONString(modelLibTrainingRequest);
+            System.out.println("modelLibTraining Request:" + modelLibTrainingRequestStr);
             Runnable task1 = new Runnable() {
                 @Override
                 public void run() {
@@ -92,12 +93,13 @@ public class ModelLibClient {
         modelLibTrainingRequest.setData_path(dataPath);
         modelLibTrainingRequest.setModel_Key(modelKey);
         modelLibTrainingRequest.setModel_type_name(modelTypeName);
+        modelLibTrainingRequest.setModel_type(modelTypeName);
         modelLibTrainingRequest.setTask_type(taskType);
         return modelLibTrainingRequest;
     }
 
     private ModelLibLoadingequest createModelLibLoadRequest( String modelKey,
-                                                                   String modelTypeName) {
+                                                             String modelTypeName) {
         ModelLibLoadingequest mdelLibLoadingequest = new ModelLibLoadingequest();
         mdelLibLoadingequest.setModel_key(modelKey);
         mdelLibLoadingequest.setModel_type(modelTypeName);
