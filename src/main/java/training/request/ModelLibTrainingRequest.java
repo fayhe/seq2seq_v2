@@ -53,11 +53,11 @@ public class ModelLibTrainingRequest {
         this.doc_type = doc_type;
     }
 
-    public String getModel_Key() {
+    public String getModel_key() {
         return model_key;
     }
 
-    public void setModel_Key(String model_key) {
+    public void setModel_key(String model_key) {
         this.model_key = model_key;
     }
 

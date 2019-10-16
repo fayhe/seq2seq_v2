@@ -91,7 +91,7 @@ public class ModelLibClient {
                                                                   String modelTypeName, String taskType) {
         ModelLibTrainingRequest modelLibTrainingRequest = new ModelLibTrainingRequest();
         modelLibTrainingRequest.setData_path(dataPath);
-        modelLibTrainingRequest.setModel_Key(modelKey);
+        modelLibTrainingRequest.setModel_key(modelKey);
         modelLibTrainingRequest.setModel_type_name(modelTypeName);
         modelLibTrainingRequest.setModel_type(modelTypeName);
         modelLibTrainingRequest.setTask_type(taskType);

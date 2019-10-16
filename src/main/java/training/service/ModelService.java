@@ -27,6 +27,7 @@ public class ModelService {
 
     public TrainingResponse training(TrainingRequest trainingRequest) {
         TrainingResponse trainingResponse = new TrainingResponse();
+        System.out.println("start train:");
         List<String> modelNames = modelDAO.getModelName(trainingRequest.getTaskName(), trainingRequest.getClientName(),
                 trainingRequest.getDocTypeName());
         for (String modelName : modelNames) {

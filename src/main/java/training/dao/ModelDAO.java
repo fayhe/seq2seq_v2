@@ -23,9 +23,10 @@ public class ModelDAO extends GenericDAO {
         Statement statement = null;
         List<String> modelNames = new ArrayList<String>();
         try {
-
             Class.forName("org.postgresql.Driver");
+            System.out.println("class loaded");
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("connection get");
             String sql = "select m.model_name " +
                     "from model m, model_type mt, doc_type dt " +
                     "where m.model_type_name = mt.model_type_name " +
@@ -51,6 +52,7 @@ public class ModelDAO extends GenericDAO {
             } finally {
                 try {
                     connection.close();
+                    System.out.println("connection release");
                 } catch (SQLException e) {
                     e.printStackTrace();
                     throw new RuntimeException(e);
