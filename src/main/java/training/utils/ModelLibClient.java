@@ -48,7 +48,7 @@ public class ModelLibClient {
         if(MODEL_LIB_ENABLE) {
             String modelKey = clientName + "_" + docTypeName + "_" + taskTypeName + "_" + modelTypeName;
             ModelLibTrainingRequest modelLibTrainingRequest = createModelLibTraininngRequest(dataPath, modelKey,
-                    modelTypeName, taskTypeName);
+                    modelTypeName, taskTypeName, clientName);
             String modelLibTrainingRequestStr = JSONObject.toJSONString(modelLibTrainingRequest);
             System.out.println("modelLibTraining Request:" + modelLibTrainingRequestStr);
             Runnable task1 = new Runnable() {
@@ -72,7 +72,7 @@ public class ModelLibClient {
         if(MODEL_LIB_ENABLE) {
             String modelKey = clientName + "_" + docTypeName + "_" + taskTypeName + "_" + modelTypeName;
             ModelLibLoadingequest modelLibLoadingRequest = createModelLibLoadRequest(modelKey,
-                    modelTypeName);
+                    modelTypeName, docTypeName, taskTypeName, clientName);
             String modelLibLoadRequestStr = JSONObject.toJSONString(modelLibLoadingRequest);
             Runnable task1 = new Runnable() {
                 @Override
@@ -88,21 +88,28 @@ public class ModelLibClient {
     }
 
     private ModelLibTrainingRequest createModelLibTraininngRequest(String dataPath, String modelKey,
-                                                                  String modelTypeName, String taskType) {
+                                                                  String modelTypeName, String taskType,
+                                                                   String clientName) {
         ModelLibTrainingRequest modelLibTrainingRequest = new ModelLibTrainingRequest();
         modelLibTrainingRequest.setData_path(dataPath);
         modelLibTrainingRequest.setModel_key(modelKey);
-        modelLibTrainingRequest.setModel_type_name(modelTypeName);
         modelLibTrainingRequest.setModel_type(modelTypeName);
         modelLibTrainingRequest.setTask_type(taskType);
+        modelLibTrainingRequest.setClient(clientName);
         return modelLibTrainingRequest;
     }
 
     private ModelLibLoadingequest createModelLibLoadRequest( String modelKey,
-                                                             String modelTypeName) {
+                                                             String modelTypeName,
+                                                             String docTypeName,
+                                                             String taskTypeName,
+                                                             String clientName) {
         ModelLibLoadingequest mdelLibLoadingequest = new ModelLibLoadingequest();
         mdelLibLoadingequest.setModel_key(modelKey);
         mdelLibLoadingequest.setModel_type(modelTypeName);
+        mdelLibLoadingequest.setClient(clientName);
+        mdelLibLoadingequest.setTask_type(taskTypeName);
+        mdelLibLoadingequest.setDoc_type(docTypeName);
         return mdelLibLoadingequest;
     }
 

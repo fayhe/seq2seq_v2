@@ -22,10 +22,10 @@ INSERT INTO model_type(model_type_name, task_name ) VALUES('BILSTMNER', 'NER');
 
         
 -- insert model data 
-INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION', 'BERTCLASSIFICATION', 'EMAIL');
-INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('CLASSIFICATION_QMA_SWIFT599_BERTCLASSIFICATION', 'BERTCLASSIFICATION', 'SWIFT599');
-INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('NER_QMA_EMAIL_BILSTMNER', 'BILSTMNER', 'EMAIL');
-INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('NER_QMA_SWIFT599_BILSTMNER', 'BILSTMNER', 'SWIFT599');
+INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('QMA_EMAIL_CLASSIFICATION_BERTCLASSIFICATION', 'BERTCLASSIFICATION', 'EMAIL');
+INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('QMA_SWIFT599_CLASSIFICATION_BERTCLASSIFICATION', 'BERTCLASSIFICATION', 'SWIFT599');
+INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('QMA_EMAIL_NER_BILSTMNER', 'BILSTMNER', 'EMAIL');
+INSERT INTO model(model_name, model_type_name, doc_type_name ) VALUES('QMA_SWIFT599_NER_BILSTMNER', 'BILSTMNER', 'SWIFT599');
 
 
 

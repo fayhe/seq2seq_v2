@@ -51,7 +51,8 @@ public class ModelService {
         String docTypeName = modelKeys[1];
         String taskName = modelKeys[2];
         String modelTypeName = modelKeys[3];
-        String modelName = taskName + "_" + clientName + "_" + docTypeName + "_" + modelTypeName;
+        String modelName = modelKey;
+        //taskName + "_" + clientName + "_" + docTypeName + "_" + modelTypeName;
         System.out.println("generated modelName:" + modelName);
         String modelMetricsStr = JSONObject.toJSONString(modelMetricsJSON);
         // CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION
@@ -72,9 +73,9 @@ public class ModelService {
     public void selectModel(String modelName) {
         //trigger model load
         String[] splittedModelName = modelName.split("_");
-        String taskName = splittedModelName[0];
-        String clientName = splittedModelName[1];
-        String docTypeName = splittedModelName[2];
+        String clientName = splittedModelName[0];
+        String docTypeName = splittedModelName[1];
+        String taskName = splittedModelName[2];
         String modelTypeName = splittedModelName[3];
         modelLibClient.triggerModelLoad( clientName,  docTypeName, taskName, modelTypeName);
         modelDAO.selectModel(modelName);

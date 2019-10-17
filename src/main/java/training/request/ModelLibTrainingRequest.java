@@ -11,18 +11,13 @@ public class ModelLibTrainingRequest {
 
     @JsonProperty(value = "model_key")
     String model_key;
-    //TODO:
-    @JsonProperty(value = "model_type_name")
-    String model_type_name;
     @JsonProperty(value = "data_path")
     String data_path;
     @JsonProperty(value = "task_type")
     String task_type;
-
-    //TODO:
     @JsonProperty(value = "model_type")
     String model_type;
-    //TODO:
+
     @JsonProperty(value = "client")
     String client;
     @JsonProperty(value = "doc_type")
@@ -59,14 +54,6 @@ public class ModelLibTrainingRequest {
 
     public void setModel_key(String model_key) {
         this.model_key = model_key;
-    }
-
-    public String getModel_type_name() {
-        return model_type_name;
-    }
-
-    public void setModel_type_name(String model_type_name) {
-        this.model_type_name = model_type_name;
     }
 
     public String getData_path() {

@@ -54,4 +54,4 @@ select model:
 http://localhost:8080/model_selection/v1/select_model
 
 
-{"model_name":"CLASSIFICATION_QMA_EMAIL_BERTCLASSIFICATION"}
+{"model_name":"QMA_EMAIL_CLASSIFICATION_BERTCLASSIFICATION"}
