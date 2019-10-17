@@ -32,7 +32,7 @@ public class ModelLibClient {
     @Value("${modellib.modelloading.url}")
     public String MODEL_LIB_LOADING_URL;
 
-    ExecutorService executor = Executors.newCachedThreadPool();
+    ExecutorService executor = Executors.newFixedThreadPool(5);
 
     public static void main(String[] args) {
         ModelLibClient modelLibClient = new ModelLibClient();
@@ -55,6 +55,7 @@ public class ModelLibClient {
                 @Override
                 public void run() {
                     // do something
+                    System.out.println("Trigger model lib model train API start. modelKey:" + modelKey);
                     HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
                     System.out.println("Trigger model lib model train API end. modelKey:" + modelKey);
                 }
@@ -78,6 +79,7 @@ public class ModelLibClient {
                 @Override
                 public void run() {
                     // do something
+                    System.out.println("Load model lib model load API start. modelKey:" + modelKey);
                     HttpPostWithJson(MODEL_LIB_LOADING_URL, modelLibLoadRequestStr);
                     System.out.println("Load model lib model load API end. modelKey:" + modelKey);
                 }
