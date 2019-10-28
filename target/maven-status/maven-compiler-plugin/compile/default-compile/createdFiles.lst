@@ -1,5 +1,15 @@
+training/controller/ModelController.class
+training/dao/ModelDAO.class
+training/request/GetModelsRequest.class
+training/response/GetModelsResponse.class
+training/request/ModelLibLoadingequest.class
 training/dao/GenericDAO.class
 training/controller/Application.class
 training/controller/Greeting.class
+training/utils/ModelLibClient.class
 training/response/TrainingResponse.class
 training/request/TrainingRequest.class
+training/service/ModelService.class
+training/request/ModelLibTrainingRequest.class
+training/request/SelectModelRequest.class
+training/request/TrainingCallBackRequest.class

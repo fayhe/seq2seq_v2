@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+	<head>
+        <title>Select Model</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+        <!-- Main CSS --> 
+        <link rel="stylesheet" href="css/style.css">
+        <script src="js/config.js"></script>
+        <!-- Font Awesome -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+  
+    <body>
+
+        <!-- Main navigation -->
+        <div id="sidebar">
+                      
+            <div class="navbar-expand-md navbar-dark"> 
+            
+                <header class="d-none d-md-block">
+                    <h1><span>my</span>website</h1>
+                </header>
+                
+                
+                <!-- Mobile menu toggle and header -->
+                <div class="mobile-header-controls">
+                    <a class="navbar-brand d-md-none d-lg-none d-xl-none" href="#"><span>my</span>website</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#SidebarContent" aria-controls="SidebarContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+         
+                <div id="SidebarContent" class="collapse flex-column navbar-collapse">
+ 
+                        
+                 <!-- Main navigation items -->
+                    <nav class="navbar navbar-dark">
+                        <div id="mainNavbar">
+                            <ul class="flex-column mr-auto">
+                                 <li class="nav-item active">
+                                        <a class="nav-link" href="upload-training-data.html">Upload Training Data <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item active">
+                                        <a class="nav-link" href="train-model.html">
+                                        Train Models <span class="sr-only">(current)</span></a>
+                                </li>
+                                 <li class="nav-item active">
+                                        <a class="nav-link" href="select-model.html"> 
+                                        Select Model <span class="sr-only">(current)</span></a>
+                                </li>                               
+                                 <li class="nav-item active">
+                                        <a class="nav-link" href="predict-data.html"> 
+                                        Predict Data <span class="sr-only">(current)</span></a>
+                                </li>  
+
+            
+                            </ul>
+                        </div>   
+                    </nav>
+                
+                
+                
+                    <!-- Sidebar search form -->
+                    <form class="form-inline sidebar-search-form my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="text" size="10"  placeholder="Search" aria-label="Search">
+                        <button class="btn my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+          
+                    <!-- Social icons -->
+                    <p class="sidebar-social-icons social-icons">
+                        <a href="#"><i class="fa fa-facebook fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-youtube fa-2x"></i></a>
+                        <a href="#"><i class="fa fa-instagram fa-2x"></i></a>
+                    </p>
+                
+                </div>
+            </div> 
+        </div>
+    
+        
+        <div id="content">
+            <div id="content-wrapper">
+                
+                <!-- Jumbtron / Slider -->
+                <div class="jumbotron-wrap">
+                    <div class="container-fluid">
+                        <div class="jumbotron jumbotron-narrow static-slider">
+                            <h1 class="text-center">Style examples</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main content area -->
+                <main class="container-fluid">
+                    <div class="row">
+
+                        <!-- Main content -->
+                        <div class="col-sm-8">
+                           <form id="target">
+                            <article>
+                           
+
+                                <h3>Form</h3>
+
+                                <fieldset>
+                                    <legend>Form legend</legend>
+                                    <div class="form-group">
+                                        <label for="exampleInputName">Application name</label>
+                                        <input type="text" class="form-control" id="appName" name="appName">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail">Task</label>
+                                        <!-- Example split danger button -->
+                                    <div class="form-group">
+                                        <div class="btn-group">
+                      
+                                        <select class="btn btn-primary"  id="taskName" name="taskName">  
+                                        <option value="CLASSIFICATION">CLASSIFICATION</option>  
+                                        <option value="NER">NER</option>  
+                                        </select>  
+
+                                        </div>
+                                    </div>    
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail">Document Type</label>
+                                        <!-- Example split danger button -->
+                                    <div class="form-group">
+                                        <select class="btn btn-primary" id="docTypeName" name="docTypeName" >  
+                                        <option value="SWIFT599">SWIFT599</option>  
+                                        <option value="EMAIL">EMAIL</option>  
+                                        </select>  
+                                    </div>  
+
+                                    </div>
+
+                                    <input type="submit" value="Train" class="btn btn-primary"></input>
+                                </fieldset>
+
+
+                            </article>
+                            </form>
+                        </div>
+
+                    </div> 
+                </main>
+
+
+     
+            </div>
+        </div>
+
+        <!-- Bootcamp JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery.min.js"></script>
+
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+       
+
+        <script type="text/javascript">
+            //TODO:
+            $('#target').submit(function() {
+               // {"client_name":"QMA","task_name":"CLASSIFICATION", "doc_type_name":"EMAIL", "training_data_path":"/ttt/uuu"}
+              appName = $("input[name='appName']").val();
+              taskName = $("select[name='taskName']").val();
+              docTypeName = $("select[name='docTypeName']").val();
+             
+              // $.post(modelTrainingAPIUrl,
+              //        contentType: 'application/json',
+              //        {client_name : appName,
+              //         task_name : taskName,
+              //         doc_type_name: docTypeName,
+              //         training_data_path: '/ttt/uuu'},
+              //         function(result){
+              //        //$("span").html(result);
+              //         alert(result);
+              // });
+
+
+              $.ajax({
+                type:"GET",
+                url: modelTrainingAPIUrl,
+                //contentType: "application/json", //如果提交的是json数据类型，则必须有此参数,表示提交的数据类型 
+                dataType:"jsonp", //表示返回值类型，不必须           
+                data: {'client_name' : appName,
+                      'task_name' : taskName,
+                      'doc_type_name': docTypeName,
+                      'training_data_path': '/ttt/uuu'},
+                 jsonpCallback: function (data) {
+                  console.log('success');
+                  alert("success");                  
+                 }        
+            })
+                
+            });
+        </script>
+
+
+    </body>
+</html>

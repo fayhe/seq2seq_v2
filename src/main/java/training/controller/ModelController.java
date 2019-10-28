@@ -3,6 +3,7 @@ package training.controller;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import training.request.GetModelsRequest;
 import training.request.TrainingCallBackRequest;
@@ -27,7 +28,24 @@ public class ModelController {
                 String.format(template, name));
     }
 
-    @RequestMapping(value="/model_training/v1/training_model",method = RequestMethod.POST)
+    @RequestMapping(value="/model_training/v1/training_model",method = RequestMethod.GET)
+    @ResponseBody
+    public TrainingResponse traingGet(@RequestParam(value="client_name") String clientName,
+                                      @RequestParam(value="task_name") String taskName,
+                                      @RequestParam(value="doc_type_name") String docTypeName,
+                                      @RequestParam(value="training_data_path") String dataPath) {
+        TrainingRequest trainingRequest = new TrainingRequest();
+        trainingRequest.setTaskName(taskName);
+        trainingRequest.setClientName(clientName);
+        trainingRequest.setDocTypeName(docTypeName);
+        trainingRequest.setTrainingDataPath(dataPath);
+        TrainingResponse trainingResponse = modelService.training(trainingRequest);
+        return trainingResponse;
+    }
+
+    @RequestMapping(value="/model_training/v1/training_model",method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
     @ResponseBody
     public TrainingResponse train(@RequestBody TrainingRequest trainingRequest) {
         TrainingResponse trainingResponse = modelService.training(trainingRequest);
@@ -35,7 +53,22 @@ public class ModelController {
     }
 
 
-    @RequestMapping(value="/model_training/v1/training_model_callback",method = RequestMethod.POST)
+
+
+    @RequestMapping(value="/model_training/v1/training_model",method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+            )
+    @ResponseBody
+    public TrainingResponse train1( TrainingRequest trainingRequest) {
+        TrainingResponse trainingResponse = modelService.training(trainingRequest);
+        return trainingResponse;
+    }
+
+
+
+    @RequestMapping(value="/model_training/v1/training_model_callback",
+            method = RequestMethod.POST
+          )
     @ResponseBody
     public void trainModelCallBack(@RequestBody TrainingCallBackRequest trainingCallBackRequest) {
         modelService.updateTrainingProcess(trainingCallBackRequest.getModelKey(), trainingCallBackRequest.getTrainedModelMetrics());

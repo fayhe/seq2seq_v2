@@ -51,16 +51,11 @@ public class ModelLibClient {
                     modelTypeName, taskTypeName, clientName);
             String modelLibTrainingRequestStr = JSONObject.toJSONString(modelLibTrainingRequest);
             System.out.println("modelLibTraining Request:" + modelLibTrainingRequestStr);
-            Runnable task1 = new Runnable() {
-                @Override
-                public void run() {
-                    // do something
-                    System.out.println("Trigger model lib model train API start. modelKey:" + modelKey);
-                    HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
-                    System.out.println("Trigger model lib model train API end. modelKey:" + modelKey);
-                }
-            };
-            Future<?> f1 = executor.submit(task1);
+
+
+            System.out.println("Load model lib model training API start. modelKey:" + modelKey);
+            HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+            System.out.println("Load model lib model training API end. modelKey:" + modelKey);
             //return HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
         }
     }
@@ -75,17 +70,11 @@ public class ModelLibClient {
             ModelLibLoadingequest modelLibLoadingRequest = createModelLibLoadRequest(modelKey,
                     modelTypeName, docTypeName, taskTypeName, clientName);
             String modelLibLoadRequestStr = JSONObject.toJSONString(modelLibLoadingRequest);
-            Runnable task1 = new Runnable() {
-                @Override
-                public void run() {
-                    // do something
-                    System.out.println("Load model lib model load API start. modelKey:" + modelKey);
-                    HttpPostWithJson(MODEL_LIB_LOADING_URL, modelLibLoadRequestStr);
-                    System.out.println("Load model lib model load API end. modelKey:" + modelKey);
-                }
-            };
-            Future<?> f1 = executor.submit(task1);
-            //return HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibTrainingRequestStr);
+
+
+            System.out.println("Load model lib model load API start. modelKey:" + modelKey);
+            HttpPostWithJson(MODEL_LIB_TRANING_URL, modelLibLoadRequestStr);
+            System.out.println("Load model lib model load API end. modelKey:" + modelKey);
         }
     }
 
